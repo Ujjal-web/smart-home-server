@@ -174,16 +174,10 @@ app.delete("/api/items/clear", async (req, res) => {
 });
 
 // ---------- Start server after DB connect ----------
-connectMongo()
-    .then(() => {
-        app.listen(port, () => {
-            console.log(`Express API running: http://localhost:${port}`);
-        });
-    })
-    .catch((err) => {
-        console.error("Failed to connect MongoDB:", err.message);
-        process.exit(1);
-    });
+module.exports = async (req, res) => {
+    await connectMongo();
+    return app(req, res);
+};
 
 process.on("SIGINT", async () => {
     try {
